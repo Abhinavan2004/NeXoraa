@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const authRoutes = require("./routes/auth.routes.js");
+const Database = require("../lib/db.js");
+
+Database();
 
 const PORT = process.env.PORT ;
 app.get("/", (req,res) =>{
