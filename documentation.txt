@@ -91,3 +91,18 @@ it helps in generating the avatar png;-'s using its API..
 
 ====================================================================================================================================
 
+
+6.) We have used Stream Upserts in our code. What is it?
+--> Upsert = Update + Insert
+It means:
+If a record (user, message, etc.) already exists, then update it.
+If it doesn't exist, then create (insert) it.
+
+Stream Upserts: Creating or updating user profiles on Stream's backend.
+Ensures the user is always in sync between your system and Stream Chat.
+It avoids duplicate users and ensures a consistent user profile.
+Upstreamer() is probably a helper/wrapper function in your code.
+
+
+=====================================================================================================================================
+

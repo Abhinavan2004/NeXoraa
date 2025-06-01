@@ -4,10 +4,7 @@ const bcrypt = require("bcrypt");
 const Upstreamer = require("../../lib/stream");
 
 
-
-
-
-
+//SIGNUP  API  REQUEST 
 
 async function signup(req , res){
 const {name , email , password} = req.body ;
@@ -31,7 +28,8 @@ if(existinguser){
     return res.status(400).json({message:"User with email already exists!!!"});
 }
 
-//for creation of Profile_pic 
+// FOR CREATION OF PROFILE_PIC FROM AVATAR
+
 const idx = Math.floor(Math.random()*100) + 1;
 const random_profile_pic = `https://avatar.iran.liara.run/public/${idx}.png`;
 
@@ -39,16 +37,16 @@ const newUser = await User.create({
     name,
     email,
     password,
-    profile_pic:random_profile_pic
+    profilepic:random_profile_pic
 })
 
 
-// for creation of Stream Profile 
+// FOR CREATION OF STREAM PROFILE 
 try{
 await Upstreamer({
     id : newUser._id.toString(),
     name : newUser.name,
-    image : newUser.profilePic || ""
+    image : newUser.profilepic || ""
 });
 console.log("Stream User created successfully");
 
@@ -58,8 +56,7 @@ catch(err){
 }
 
 
-
-//token creation process 
+//TOKEN CREATION PROCESS 
 const token = jwt.sign({userId:newUser._id},process.env.JWT_SECRET_KEY,{
     expiresIn:"7d"
 })
@@ -84,6 +81,7 @@ catch(error){
 
 
 
+// LOGIN   API  REQUEST
 
 
 async function login(req , res){
@@ -127,10 +125,7 @@ catch(err){
 
 
 
-
-
-
-
+//  LOGOUT   API  REQUEST
 
 
 async function logout(req , res){
@@ -139,4 +134,60 @@ async function logout(req , res){
 
 }
 
-module.exports={logout , login , signup}; 
+
+
+// ONBOARD API REQUEST 
+async function onboard(req, res) {
+    try {
+        const userId = req.user._id;
+
+        const { fullName, bio, nativeLanguage, learningLanguage, location } = req.body;
+
+        if (!fullName || !bio || !nativeLanguage || !learningLanguage || !location) {
+            return res.status(400).json({
+                message: "All fields are required",
+                missingFields: [
+                    !fullName && "fullName",
+                    !bio && "bio",
+                    !nativeLanguage && "nativeLanguage",
+                    !learningLanguage && "learningLanguage",
+                    !location && "location",
+                ].filter(Boolean)
+            });
+        }
+
+        const update_user = await User.findByIdAndUpdate(
+            userId,
+            {
+                name: fullName,                   
+                bio: bio,
+                native_language: nativeLanguage,  
+                learning_language: learningLanguage, 
+                location: location,
+                isOnBoard: true
+            },
+            { new: true }
+        );
+
+        if (!update_user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "User onboarded successfully",
+            user: update_user
+        });
+
+    } catch (error) {
+        console.error("Onboard error:", error);
+        return res.status(500).json({
+            message: "Internal server error"
+        });
+    }
+}
+
+
+
+module.exports = { logout, login, signup, onboard };
