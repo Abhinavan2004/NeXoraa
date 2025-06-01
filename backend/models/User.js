@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
  location:{
     type:String,
  },
- isonBoard:{
+ isOnBoard:{
     type:Boolean,
     default:false
  },

@@ -3,6 +3,8 @@ const app = express();
 require('dotenv').config();
 const authRoutes = require("./routes/auth.routes.js");
 const Database = require("../lib/db.js");
+const cookieParser = require("cookie-parser");
+// const { protected } = require('../middleware/auth.middleware');
 
 Database();
 
@@ -12,6 +14,7 @@ app.get("/", (req,res) =>{
 })
 
 app.use(express.json()); 
+app.use(cookieParser());
 
 app.use("/api/auth" , authRoutes);
 
