@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 const authRoutes = require("./routes/auth.routes.js");
-const Database = require("../lib/db.js");
+const userRoutes = require("./routes/user.routes.js");
+const Database = require("./lib/db.js");
 const cookieParser = require("cookie-parser");
 // const { protected } = require('../middleware/auth.middleware');
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth" , authRoutes);
+app.use("/api/user" , userRoutes);
+
 
 app.listen(PORT, ()=>{
     console.log(`Server is running on port ${PORT}`);
