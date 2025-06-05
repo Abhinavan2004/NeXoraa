@@ -1,7 +1,7 @@
-const User = require("../../models/User");
+const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const Upstreamer = require("../../lib/stream");
+const Upstreamer = require("../lib/stream");
 
 
 //SIGNUP  API  REQUEST 
@@ -11,16 +11,16 @@ const {name , email , password} = req.body ;
 
 try{
 if(!name || !email || !password){
-    return res.status(400).send("Please enter the required fields!!!");
+    return res.status(400).json("Please enter the required fields!!!");
 }
 
 if(password.length < 6){
-   return  res.status(400).send("Password must be of atleast 6 characters");
+   return  res.status(400).json("Password must be of atleast 6 characters");
 }
 
 const email_regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if(!email_regex.test(email)){
-    return res.status(400).send("Enter the valid email id");
+    return res.status(400).json("Enter the valid email id");
 }
 
 const existinguser = await User.findOne({email:email});
@@ -90,17 +90,17 @@ const {email , password} = req.body;
 try{
     
     if(!email || !password){
-    return res.status(400).send("Please enter the required fields!!!");
+    return res.status(400).json("Please enter the required fields!!!");
     }
 
     const user_login = await User.findOne({email:email});
     if(!user_login){
-        return res.status(400).send({message:"Invalid Email id."});
+        return res.status(400).json({message:"Invalid Email id."});
     }
  
         const isMatch = await bcrypt.compare(password,user_login.password);
         if(!isMatch){
-            return res.status(400).send({message:"Invalid Password."});
+            return res.status(400).json({message:"Invalid Password."});
     }
     const token = jwt.sign({userId:user_login._id},process.env.JWT_SECRET_KEY,{
         expiresIn:"7d"
