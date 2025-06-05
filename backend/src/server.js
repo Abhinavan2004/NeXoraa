@@ -3,6 +3,7 @@ const app = express();
 require('dotenv').config();
 const authRoutes = require("./routes/auth.routes.js");
 const userRoutes = require("./routes/user.routes.js");
+const chatRoutes = require("./routes/chat.routes.js");
 const Database = require("./lib/db.js");
 const cookieParser = require("cookie-parser");
 // const { protected } = require('../middleware/auth.middleware');
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 app.use("/api/auth" , authRoutes);
 app.use("/api/user" , userRoutes);
+app.use("/api/chat" , chatRoutes);
 
 
 app.listen(PORT, ()=>{
