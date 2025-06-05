@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const Upstreamer = require("../lib/stream");
+const {Upstreamer} = require("../lib/stream.js");
 
 
 //SIGNUP  API  REQUEST 

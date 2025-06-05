@@ -20,4 +20,17 @@ const Upstreamer = async (userData) =>{
     }
 }
 
-module.exports = Upstreamer ;
+
+
+const generateStreamToken = (userId) => {
+    try{
+        const token = StreamClient.createToken(userId.toString());
+        return token;
+    }
+    catch(err){
+        return res.status(500).json({message:"Internal Server Error"});
+        console.log("Error in generating Stream Token" + err);  
+    }
+}
+
+module.exports = {Upstreamer , generateStreamToken};
