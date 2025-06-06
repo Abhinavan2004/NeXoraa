@@ -17,6 +17,7 @@ const Upstreamer = async (userData) =>{
     }
     catch(err){
         console.log("Error in Upserting Stream User" + err);
+        throw err;  // Throwing error to be handled in the calling function
     }
 }
 
@@ -28,8 +29,8 @@ const generateStreamToken = (userId) => {
         return token;
     }
     catch(err){
-        return res.status(500).json({message:"Internal Server Error"});
-        console.log("Error in generating Stream Token" + err);  
+        console.log("Error in Generating Stream Token: " + err);
+        throw err ;
     }
 }
 
