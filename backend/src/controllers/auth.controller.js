@@ -69,6 +69,7 @@ res.cookie("jwt" , token,{
 })
 
 res.status(201).json({success:true , user:newUser , message:"User Signup Successfully !!"});
+
 }
 catch(error){
     console.log("Error in signup");
