@@ -106,3 +106,25 @@ Upstreamer() is probably a helper/wrapper function in your code.
 
 =====================================================================================================================================
 
+
+7.) In the frontend we have used Tailwind CSS and as a component Library we are using DAISY UI.
+
+    DaisyUI is a Tailwind CSS component library that adds pre-built, styled UI components (like buttons, modals, alerts, dropdowns, etc.) using Tailwind utility classes. It's built on top of Tailwind CSS, making it easier and faster to build beautiful UIs without writing tons of custom styles.
+
+    🧠 What is DaisyUI?
+It's a plugin for Tailwind CSS.
+It provides a collection of customizable, accessible, and responsive components.
+All components are built with Tailwind classes, so they work seamlessly with your Tailwind config.
+It supports dark mode, themes, and is highly customizable.
+
+    🛠️ Why use DaisyUI?
+Benefit	Description
+🔧 Ready-made components	No need to build common UI elements from scratch (e.g., buttons, cards).
+🎨 Theme support	Easily switch between multiple pre-defined themes (light, dark, etc.).
+🕶 Dark mode built-in	Simple to enable dark mode for your app.
+⚙ Works with Tailwind	Uses Tailwind classes, so no extra learning curve if you're using Tailwind.
+🧩 Extendable and Custom	You can customize or extend its components easily.
+
+
+=====================================================================================================================================
+
