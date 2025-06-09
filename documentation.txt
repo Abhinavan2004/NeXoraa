@@ -128,3 +128,34 @@ Benefit	Description
 
 =====================================================================================================================================
 
+
+8.) 🧁 What is react-toastify (React "Toster")?
+You probably meant react-toastify, a popular React notification library used to show non-blocking toast messages (like success alerts, errors, warnings, etc.).
+
+✅ Why use react-toastify?
+Easy to use
+Auto-dismiss feature
+Stylish and customizable
+Works anywhere in your app
+Supports dark mode, icons, progress bar, etc.
+
+
+
+=============================================================================================================================================================================
+
+
+9.) ✅ Axios – HTTP Client for API Requests
+Purpose:
+Used to make HTTP requests (GET, POST, PUT, DELETE) from your frontend (like React) to your backend or an external API.
+
+Why use it?
+
+Easy to use syntax.
+Supports promises and async/await.
+Automatically parses JSON response.
+Allows custom headers, tokens, and error handling.
+
+
+=====================================================================================================================================================
+
+
