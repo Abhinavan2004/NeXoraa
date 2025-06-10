@@ -22,12 +22,11 @@ const App = () => {
     }
   })
 
-const authUser = authData?.user;
+const authUser = authData?.user; //(user hi rakha bcoz backend mein bhi user hi hai
 
 
   return (
     <div className="text-5xl h-screen" data-theme="dark">
-      <button onClick={() => toast.error("hello")}>Button</button>
       <Routes>
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/call" element={authUser ? <CallPage /> : <Navigate to="/login" />} />
