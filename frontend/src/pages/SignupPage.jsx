@@ -11,26 +11,26 @@ const SignupPage = () => {
   const [datacollect, setdatacollect] = useState({
     name: "",
     email: "",
-    password: "" // Fixed typo: was "pasword"
+    password: ""
   });
 
 
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const {mutate , isPending , error} = useMutation({
-    mutationFn: async () => {
-      const response = await axiosInstance.post("/auth/signup", datacollect);
+  const {mutate:signup_mutation , isPending , error} = useMutation({
+    mutationFn: async (userData) => {
+      const response = await axiosInstance.post("/auth/signup", userData);
       return response.data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
       navigate('/');
     }
   })
   const handSignup = (e) => {
     e.preventDefault();
-    mutate();
+    signup_mutation(datacollect);
   }
 
   return (
@@ -99,6 +99,14 @@ const SignupPage = () => {
                     <p className='text-xs opacity-70 mt-1'>Password must be at least 6 characters long.</p>
                 </div>
 
+
+                {/* ERROR */}
+                {error &&
+                <div className='alert alert-error mb-4'>
+                  <span className='text-sm'>{error.response?.data || "An error occurred. Please try again."}</span>
+                </div>
+}
+
                 {/* PRIVACY_POLICY*/}
                 <div className="form-control w-full">
                   <label className="label cursor-pointer justify-start gap-2">
@@ -110,7 +118,7 @@ const SignupPage = () => {
                   </label>
                 </div>
               </div>
-              <button className='btn btn-primary w-full' type='submit'>{isPending ? "Signing Up..." : "Create Account"}</button>
+              <button className='btn btn-primary w-full' type='submit' disabled={isPending} >{isPending ? "Signing Up..." : "Create Account"}</button>
 
               <div className='text-center mt-4'>
                 <p className='text-sm'>

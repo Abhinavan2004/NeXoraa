@@ -13,7 +13,7 @@ router.post("/signup" , signup) ;
 router.post("/onboarding" , authmiddleware ,onboard);
 
 router.get("/me" , authmiddleware , (req,res) =>{
-    res.status(200).json({success:true , user:user.req});
+    res.status(200).json({success:true , user:req.user});
 })
 
 module.exports = router ;

@@ -9,7 +9,7 @@ if( !apikey || !apikey_secret){
 }
 
 const StreamClient = StreamChat.getInstance(apikey, apikey_secret)
- f
+ 
 const Upstreamer = async (userData) =>{
     try{
         await StreamClient.upsertUsers([userData]);  // Upsert helps in creting users in Stream if not present but if present then helps in Updating them ..
