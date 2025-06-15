@@ -334,3 +334,15 @@ Auth state updated with new user info
 
 
 =======================================================================================================================
+
+
+
+## 13.) Loader Page :-  
+        This page is just for the loading animation. It will be displayed when the user is waiting for the response from the server.
+        It uses LoaderSinWheel icon form lucide react 
+
+
+=========================================================================================================================
+
+
+## 14.) 

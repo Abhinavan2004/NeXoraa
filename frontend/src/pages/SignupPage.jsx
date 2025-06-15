@@ -25,9 +25,11 @@ const SignupPage = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
-      navigate('/');
+      navigate('/onboard');
     }
   })
+
+  
   const handSignup = (e) => {
     e.preventDefault();
     signup_mutation(datacollect);
