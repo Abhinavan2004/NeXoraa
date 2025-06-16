@@ -46,7 +46,7 @@ const isOnboarded = authUser?.isOnboarded;
         <Route path="/chat" element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />} />
         <Route path="/login" element={!isAuthenticated ? <LoginPage /> :<Navigate to="/" />} />
         <Route path="/signup" element={!isAuthenticated ? <SignupPage /> : <Navigate to="/" />} />
-        <Route path="/onboard" element={isAuthenticated ? <OnBoardPage /> : <Navigate to="/login" />} />
+        <Route path="/onboarding" element={isAuthenticated ? <OnBoardPage /> : <Navigate to="/login" />} />
         <Route path="/notifications" element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />} />
       </Routes>
       <Toaster />

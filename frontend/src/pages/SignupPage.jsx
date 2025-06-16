@@ -25,7 +25,7 @@ const SignupPage = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
-      navigate('/onboard');
+      navigate('/onboarding');
     }
   })
 
