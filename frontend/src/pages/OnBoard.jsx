@@ -1,96 +1,140 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useMutation , useQueryClient , useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import axiosInstance from '../lib/axios.js';
 import React from 'react'
 import { useState } from 'react';
-import { CameraIcon } from 'lucide-react';
+import { CameraIcon, LoaderIcon, ShipWheelIcon } from 'lucide-react';
+import { LANGUAGES } from '../constants/constants.js';
+import toast from 'react-hot-toast';
 
+const PageLoader = () => (
+  <div className="min-h-screen flex justify-center items-center">
+    <LoaderIcon className="size-8 animate-spin" />
+  </div>
+);
 
 const OnBoard = () => {
  
-const getAuthUser = async () => {
-const res = await axiosInstance.get("/auth/me");
-return res.data;
-}
-
- const { data: authUser, isLoading } = useQuery({
+  const { data: authData, isLoading } = useQuery({
     queryKey: ["authUser"],
-    queryFn: getAuthUser,
-    retry: false
+    queryFn: async () => {
+      const res = await axiosInstance.get("/auth/me");
+      return res.data;
+    }
   });
 
-  const [formdata , setFormData] = useState({
-    name: authUser? authUser.name : "",
-    bio : authUser? authUser.bio : "",
-    nativeLanguage: authUser? authUser.nativeLanguage : "",
-    learningLanguage: authUser? authUser.learningLanguage : "", 
-    location : authUser? authUser.location : "",
-    profilepic : authUser? authUser.profilepic : "",
-  })
+  const authUser = authData?.user; 
 
+  const [formdata, setFormData] = useState({
+    name: authUser?.name || "",
+    bio: authUser?.bio || "",
+    native_Language: authUser?.native_Language || "",
+    learning_Language: authUser?.learning_Language || "", 
+    location: authUser?.location || "",
+    profilepic: authUser?.profilepic || "",
+  });
 
-  
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-
-  const {mutate:onboard_mutation , isPending ,error} = useMutation({
-    mutationFn : async(userData) => {
+  const { mutate: onboard_mutation, isPending, error } = useMutation({
+    mutationFn: async (userData) => {
+      console.log("Sending Data...");
       const response = await axiosInstance.post("/auth/onboarding", userData);
       return response.data;
     },
-    onSuccess : (data) =>{
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
       navigate('/'); // Redirect to home page after successful onboarding
+    },
+    onError: (error) => {
+      console.log("Error Occurred:" + error);
+      toast.error(error.response?.data?.message || 'An error occurred');
     }
-  })
-
+  });
 
   const handleonboard = (e) => {
     e.preventDefault();
-    onboard_mutation(formdata);
-  }
+    if (!formdata.name.trim()) {
+      toast.error('Name is required');
+      return;
+    }
+    if (!formdata.native_Language) {
+      toast.error('Native language is required');
+      return;
+    }
+    if (!formdata.learning_Language) {
+      toast.error('Learning language is required');
+      return;
+    }
 
+    // Check if native and learning languages are the same
+    if (formdata.native_Language === formdata.learning_Language) {
+      toast.error('Native and learning languages cannot be the same');
+      return;
+    }
+
+
+      // Transform the data to match server expectations
+    const transformedData = {
+      fullName: formdata.name,
+      bio: formdata.bio,
+      nativeLanguage: formdata.native_Language,
+      learningLanguage: formdata.learning_Language,
+      location: formdata.location,
+      profilepic: formdata.profilepic
+    };
+
+    console.log('Form data being submitted:', transformedData); // Debug log
+    onboard_mutation(transformedData);
+  }
+  
 
   if (isLoading) return <PageLoader />;
 
-
   return (
-<div className="min-h-screen flex justify-center items-center p-4" data-theme="night">
-  <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
-    <div className="card-body p-6 sm:p-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Complete Your Profile</h1>
-      <form onSubmit={handleonboard} className="space-y-6">
+    <div className="min-h-screen flex justify-center items-center p-4" data-theme="night">
+      <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
+        <div className="card-body p-6 sm:p-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Complete Your Profile</h1>
+          <form onSubmit={handleonboard} className="space-y-6">
 
-        {/* PROFILE_PICTURE_BOX */}
-        <div className="flex flex-col items-center justify-center space-y-4">
-{/* IMAGE PREVIEW */}
-<div className="size-32 rounded-full bg-base-300 overflow-hidden">
+            {/* PROFILE_PICTURE_BOX */}
+            <div className="flex flex-col items-center justify-center space-y-4">
+              {/* IMAGE PREVIEW */}
+              <div className="size-32 rounded-full bg-base-300 overflow-hidden">
                 {formdata.profilepic ? (
                   <img
                     src={formdata.profilepic}
                     alt="Profile Preview"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.log('Image failed to load:', formdata.profilepic);
+                      // Hide broken image and show camera icon instead
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
                   />
-                ) : (
-                  <div className="flex items-center justify-center h-full">
-                    <CameraIcon className="size-12 text-base-content opacity-40" />
-                  </div>
+                ) : null}
+                <div 
+                  className="flex items-center justify-center h-full"
+                  style={{ display: formdata.profilepic ? 'none' : 'flex' }}
+                >
+                  <CameraIcon className="size-12 text-base-content opacity-40" />
+                </div>
+              </div>
+            </div>
 
-)}
-</div>
-</div>
-    
             {/* NAME FIELD */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Full Name</span>
+                <span className="font-bold label-text">Full Name</span>
               </label>
               <input
                 type="text"
                 name="name"
                 value={formdata.name}
-                onChange={handleInputChange}
+                onChange={(e) => setFormData({ ...formdata, name: e.target.value })}
                 className="input input-bordered w-full"
                 placeholder="Enter your full name"
                 required
@@ -100,77 +144,76 @@ return res.data;
             {/* BIO FIELD */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Bio</span>
+                <span className="font-bold label-text">Bio</span>
               </label>
               <textarea
                 name="bio"
                 value={formdata.bio}
-                onChange={handleInputChange}
+                onChange={(e) => setFormData({ ...formdata, bio: e.target.value })}
                 className="textarea textarea-bordered w-full"
                 placeholder="Tell us about yourself"
-                rows="3"
+                rows="2"
               />
             </div>
 
-            {/* NATIVE LANGUAGE */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Native Language</span>
-              </label>
-              <input
-                type="text"
-                name="nativeLanguage"
-                value={formdata.nativeLanguage}
-                onChange={handleInputChange}
-                className="input input-bordered w-full"
-                placeholder="Your native language"
-                required
-              />
-            </div>
+            {/*LANGUAGES */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+              {/* NATIVE LANGUAGE */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="font-bold label-text">Native Language</span>
+                </label>
+                <select
+                  name="native_Language"
+                  value={formdata.native_Language}
+                  onChange={(e) => setFormData({ ...formdata, native_Language: e.target.value })}
+                  className="select select-bordered w-full"
+                  required
+                >
+                  <option value="">Select Your Language</option>
+                  {LANGUAGES.map((lang) => (
+                    <option key={`native-${lang}`} value={lang.toLowerCase()}>
+                      {lang}
+                    </option>
+                  ))}
+                </select>
+              </div>
 
-            {/* LEARNING LANGUAGE */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Language You're Learning</span>
-              </label>
-              <input
-                type="text"
-                name="learningLanguage"
-                value={formdata.learningLanguage}
-                onChange={handleInputChange}
-                className="input input-bordered w-full"
-                placeholder="Language you want to learn"
-                required
-              />
+              {/* LEARNING LANGUAGE */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="font-bold label-text">Language You're Learning</span>
+                </label>
+                <select
+                  name="learning_Language"
+                  value={formdata.learning_Language}
+                  onChange={(e) => setFormData({ ...formdata, learning_Language: e.target.value })}
+                  className="select select-bordered w-full"
+                  required
+                >
+                  <option value="">Select Your Language</option>
+                  {LANGUAGES.map((lang) => (
+                    <option key={`learning-${lang}`} value={lang.toLowerCase()}>
+                      {lang}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* LOCATION */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Location</span>
+                <span className="font-bold label-text">Location</span>
               </label>
               <input
                 type="text"
                 name="location"
                 value={formdata.location}
-                onChange={handleInputChange}
-                className="input input-bordered w-full"
+                onChange={(e) => setFormData({ ...formdata, location: e.target.value })}
+                className="input z-10 input-bordered w-full"
                 placeholder="Your location"
-              />
-            </div>
-
-            {/* PROFILE PICTURE URL */}
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Profile Picture URL</span>
-              </label>
-              <input
-                type="url"
-                name="profilepic"
-                value={formdata.profilepic}
-                onChange={handleInputChange}
-                className="input input-bordered w-full"
-                placeholder="https://example.com/your-photo.jpg"
               />
             </div>
 
@@ -181,9 +224,19 @@ return res.data;
                 className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
                 disabled={isPending}
               >
-                {isPending ? 'Setting up your profile...' : 'Complete Profile'}
+                {!isPending ? 
+                  (<>
+                    <ShipWheelIcon className='size-5 mr-2'/>
+                    Complete OnBoarding
+                  </>) :
+                  (<>
+                    <LoaderIcon className='size-5 mr-2 animate-spin'/>
+                    OnBoarding...
+                  </>) 
+                }
               </button>
             </div>
+  
           </form>
         </div>
       </div>

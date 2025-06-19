@@ -78,10 +78,6 @@ catch(error){
 }
 
 
-
-
-
-
 // LOGIN   API  REQUEST
 
 
