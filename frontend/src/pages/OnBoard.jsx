@@ -43,9 +43,18 @@ const OnBoard = () => {
       const response = await axiosInstance.post("/auth/onboarding", userData);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+  console.log("Onboarding successful:", data); // Debug log
+      toast.success('Profile completed successfully!');
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
       navigate('/'); // Redirect to home page after successful onboarding
+  setTimeout(() => {
+        console.log("Timeout navigation attempt...");
+        if (window.location.pathname === '/onboarding') {
+          console.log("Still on onboard page, trying window.location...");
+          window.location.href = '/';
+        }
+      }, 1000);
     },
     onError: (error) => {
       console.log("Error Occurred:" + error);
@@ -55,6 +64,7 @@ const OnBoard = () => {
 
   const handleonboard = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     if (!formdata.name.trim()) {
       toast.error('Name is required');
       return;
@@ -73,7 +83,6 @@ const OnBoard = () => {
       toast.error('Native and learning languages cannot be the same');
       return;
     }
-
 
       // Transform the data to match server expectations
     const transformedData = {
@@ -102,26 +111,8 @@ const OnBoard = () => {
             {/* PROFILE_PICTURE_BOX */}
             <div className="flex flex-col items-center justify-center space-y-4">
               {/* IMAGE PREVIEW */}
-              <div className="size-32 rounded-full bg-base-300 overflow-hidden">
-                {formdata.profilepic ? (
-                  <img
-                    src={formdata.profilepic}
-                    alt="Profile Preview"
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      console.log('Image failed to load:', formdata.profilepic);
-                      // Hide broken image and show camera icon instead
-                      e.target.style.display = 'none';
-                      e.target.nextSibling.style.display = 'flex';
-                    }}
-                  />
-                ) : null}
-                <div 
-                  className="flex items-center justify-center h-full"
-                  style={{ display: formdata.profilepic ? 'none' : 'flex' }}
-                >
-                  <CameraIcon className="size-12 text-base-content opacity-40" />
-                </div>
+ <div className="size-32 rounded-full bg-base-300 overflow-hidden flex items-center justify-center">
+                <CameraIcon className="size-12 text-base-content opacity-40" />
               </div>
             </div>
 
@@ -220,7 +211,8 @@ const OnBoard = () => {
             {/* SUBMIT BUTTON */}
             <div className="form-control mt-8">
               <button 
-                type="submit" 
+                type="button" 
+                onClick={handleonboard}
                 className={`btn btn-primary w-full ${isPending ? 'loading' : ''}`}
                 disabled={isPending}
               >
