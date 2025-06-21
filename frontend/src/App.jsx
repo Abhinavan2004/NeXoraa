@@ -20,7 +20,7 @@ const App = () => {
     queryFn:async () =>{
       const res = await axiosInstance.get("/auth/me");
       return res.data;
-    }
+    },
   })
 
 const authUser = authData?.user; //(user hi rakha bcoz backend mein bhi user hi hai
@@ -44,8 +44,8 @@ const isOnboarded = authUser?.isOnboarded;
           />
         <Route path="/call" element={isAuthenticated ? <CallPage /> : <Navigate to="/login" />} />
         <Route path="/chat" element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />} />
-        <Route path="/login" element={!isAuthenticated ? <LoginPage /> :<Navigate to="/" />} />
-        <Route path="/signup" element={!isAuthenticated ? <SignupPage /> : <Navigate to="/" />} />
+        <Route path="/login" element={!isAuthenticated ? <LoginPage /> :<Navigate to={!isOnboarded ? "/onboarding" : "/"} />} />
+        <Route path="/signup" element={!isAuthenticated ? <SignupPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />} />
         <Route path="/onboarding" element={
           isAuthenticated ? 
           (!isOnboarded ?

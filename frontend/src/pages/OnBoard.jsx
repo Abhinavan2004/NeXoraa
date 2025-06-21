@@ -7,11 +7,7 @@ import { CameraIcon, LoaderIcon, ShipWheelIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants/constants.js';
 import toast from 'react-hot-toast';
 
-const PageLoader = () => (
-  <div className="min-h-screen flex justify-center items-center">
-    <LoaderIcon className="size-8 animate-spin" />
-  </div>
-);
+{/* <PageLoader /> */}
 
 const OnBoard = () => {
  
@@ -20,7 +16,8 @@ const OnBoard = () => {
     queryFn: async () => {
       const res = await axiosInstance.get("/auth/me");
       return res.data;
-    }
+    },
+    retry:false
   });
 
   const authUser = authData?.user; 
@@ -44,17 +41,27 @@ const OnBoard = () => {
       return response.data;
     },
     onSuccess: async (data) => {
-  console.log("Onboarding successful:", data); // Debug log
+      console.log("Onboarding successful:", data);
       toast.success('Profile completed successfully!');
-      queryClient.invalidateQueries({ queryKey: ['authUser'] });
-      navigate('/'); // Redirect to home page after successful onboarding
-  setTimeout(() => {
-        console.log("Timeout navigation attempt...");
-        if (window.location.pathname === '/onboarding') {
-          console.log("Still on onboard page, trying window.location...");
-          window.location.href = '/';
+      
+      // Optimistically update the cache for immediate navigation
+      queryClient.setQueryData(['authUser'], (oldData) => ({
+        ...oldData,
+        user: {
+          ...oldData.user,
+          isOnboarded: true,
+          // Update other fields if they're returned from the server
+          ...data.user
         }
-      }, 1000);
+      }));
+      
+      // Navigate immediately
+      navigate('/');
+      
+      // Also invalidate to ensure fresh data from server
+      // This happens in background after navigation
+      queryClient.invalidateQueries({ queryKey: ['authUser'] });
+    
     },
     onError: (error) => {
       console.log("Error Occurred:" + error);
@@ -106,7 +113,7 @@ const OnBoard = () => {
       <div className="card bg-base-200 w-full max-w-3xl shadow-xl">
         <div className="card-body p-6 sm:p-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">Complete Your Profile</h1>
-          <form onSubmit={handleonboard} className="space-y-6">
+          <form className="space-y-6">
 
             {/* PROFILE_PICTURE_BOX */}
             <div className="flex flex-col items-center justify-center space-y-4">
