@@ -42,26 +42,13 @@ const OnBoard = () => {
     },
     onSuccess: async (data) => {
       console.log("Onboarding successful:", data);
-      toast.success('Profile completed successfully!');
-      
-      // Optimistically update the cache for immediate navigation
-      queryClient.setQueryData(['authUser'], (oldData) => ({
-        ...oldData,
-        user: {
-          ...oldData.user,
-          isOnboarded: true,
-          // Update other fields if they're returned from the server
-          ...data.user
-        }
-      }));
-      
+      toast.success('Profile completed successfully!');     
       // Navigate immediately
       navigate('/');
       
       // Also invalidate to ensure fresh data from server
       // This happens in background after navigation
       queryClient.invalidateQueries({ queryKey: ['authUser'] });
-    
     },
     onError: (error) => {
       console.log("Error Occurred:" + error);

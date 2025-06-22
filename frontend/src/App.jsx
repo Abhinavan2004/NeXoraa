@@ -27,14 +27,14 @@ const authUser = authData?.user; //(user hi rakha bcoz backend mein bhi user hi 
 
 if (isLoading) return <PageLoader />;
 
-
 const isAuthenticated = authUser? true : false;
-const isOnboarded = authUser?.isOnboarded;
+const isOnboarded = authUser?.isOnBoard; 
 
 
   return (
     <div className="h-screen" data-theme="night">
       <Routes>
+
         <Route path="/" element={
           isAuthenticated && isOnboarded ? (<HomePage />) :
            (
@@ -42,16 +42,28 @@ const isOnboarded = authUser?.isOnboarded;
         ) 
           } 
           />
+
+
         <Route path="/call" element={isAuthenticated ? <CallPage /> : <Navigate to="/login" />} />
         <Route path="/chat" element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />} />
-<Route path="/login" element={!isAuthenticated ? <LoginPage /> : (isOnboarded ? <Navigate to="/" /> : <Navigate to="/onboarding" />)} />        <Route path="/signup" element={!isAuthenticated ? <SignupPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />} />
-        <Route path="/onboarding" element={
+
+
+<Route path="/login" element={
+  !isAuthenticated ? <LoginPage /> : 
+  (isOnboarded ? <Navigate to="/" /> : <Navigate to="/onboarding" />)
+} />     
+
+<Route path="/signup" element={!isAuthenticated ? <SignupPage /> : <Navigate to={isOnboarded ? "/" : "/onboarding"} />} />
+
+
+   <Route path="/onboarding" element={
           isAuthenticated ? 
           (!isOnboarded ?
              (<OnBoardPage />) 
               : (<Navigate to="/" />)
               ) : <Navigate to="/login" />} />
         <Route path="/notifications" element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />} />
+        
       </Routes>
       <Toaster />
     </div>
