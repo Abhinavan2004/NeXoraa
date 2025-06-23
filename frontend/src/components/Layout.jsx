@@ -1,8 +1,20 @@
 import React from 'react'
+import Sidebar from './Sidebar';
+import Navbar from './Navbar';
 
-const Layout = () => {
+const Layout = ({children , showSidebars=false}) => {
   return (
-    <div>Layout</div>
+<div className='min-h-screen '>
+  <div className='flex'>
+    {showSidebars && <Sidebar />}
+
+    <div className='flex-1 flex flex-col'>
+      <Navbar />
+
+      <main className='flex-1 overflow-y-auto'>{children}</main>
+    </div>
+  </div>
+</div>
   )
 }
 
