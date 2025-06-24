@@ -21,9 +21,8 @@ const App = () => {
     queryFn:async () =>{
       const res = await axiosInstance.get("/auth/me");
       return res.data;
-    },
-  })
-
+  }
+})
 const authUser = authData?.user; //(user hi rakha bcoz backend mein bhi user hi hai
 
 if (isLoading) return <PageLoader />;

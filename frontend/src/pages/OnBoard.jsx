@@ -7,7 +7,6 @@ import { CameraIcon, LoaderIcon, ShipWheelIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants/constants.js';
 import toast from 'react-hot-toast';
 
-{/* <PageLoader /> */}
 
 const OnBoard = () => {
  
@@ -40,6 +39,7 @@ const OnBoard = () => {
       const response = await axiosInstance.post("/auth/onboarding", userData);
       return response.data;
     },
+    
     onSuccess: async (data) => {
       console.log("Onboarding successful:", data);
       toast.success('Profile completed successfully!');     
