@@ -30,17 +30,19 @@ if(existinguser){
 
 // FOR CREATION OF PROFILE_PIC FROM AVATAR
 
-// const idx = Math.floor(Math.random()*100) + 1;
-// const random_profile_pic = `https://avatar.iran.liara.run/public/${idx}.png`;
+const idx = Math.floor(Math.random()*100) + 1;
+const random_profile_pic = `https://avatar.iran.liara.run/public/${idx}.png`;
 
-const random = 123;
+// const random = 123;
 const newUser = await User.create({
     name,
     email,
     password,
-    // profilepic:random_profile_pic
-    profilepic:random
+    profilepic:random_profile_pic
+    // profilepic:random
 })
+
+
 
 
 // FOR CREATION OF STREAM PROFILE 
@@ -56,6 +58,8 @@ console.log("Stream User created successfully");
 catch(err){
     console.log("Error in Creating Stream User : " + err);
 }
+
+
 
 
 //TOKEN CREATION PROCESS 
