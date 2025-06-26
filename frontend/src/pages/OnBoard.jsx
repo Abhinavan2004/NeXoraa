@@ -2,15 +2,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import axiosInstance from '../lib/axios.js';
 import React from 'react'
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { CameraIcon, LoaderIcon, ShipWheelIcon } from 'lucide-react';
 import { LANGUAGES } from '../constants/constants.js';
 import toast from 'react-hot-toast';
 
 
+
 const OnBoard = () => {
  
-  const { data: authData, isLoading } = useQuery({
+  const { data: authData, isLoading: isAuthLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       const res = await axiosInstance.get("/auth/me");
@@ -56,6 +57,18 @@ const OnBoard = () => {
     }
   });
 
+    const [avatarUrl, setAvatarUrl] = useState("");
+    const [isAvatarLoading, setIsAvatarLoading] = useState(true);
+
+ useEffect(() => {
+    // Generate a random avatar URL
+    const randomId = Math.floor(Math.random()*100) + 1;
+    const url = `https://avatar.iran.liara.run/public/${randomId}`;
+    setAvatarUrl(url);
+    setIsAvatarLoading(false);
+  }, []);
+
+
   const handleonboard = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -93,7 +106,7 @@ const OnBoard = () => {
   }
   
 
-  if (isLoading) return <PageLoader />;
+  if (isAuthLoading) return <PageLoader />;
 
   return (
     <div className="min-h-screen flex justify-center items-center p-4" data-theme="night">
@@ -106,9 +119,16 @@ const OnBoard = () => {
             <div className="flex flex-col items-center justify-center space-y-4">
               {/* IMAGE PREVIEW */}
  <div className="size-32 rounded-full bg-base-300 overflow-hidden flex items-center justify-center">
-                <CameraIcon className="size-12 text-base-content opacity-40" />
-              </div>
-            </div>
+{isAvatarLoading ? (
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-base-content opacity-40"></div>
+        ) : (
+          <img 
+            src={avatarUrl} 
+            alt="Profile Avatar" 
+            className="w-full h-full object-cover" />
+        )}
+      </div>
+      </div>
 
             {/* NAME FIELD */}
             <div className="form-control">

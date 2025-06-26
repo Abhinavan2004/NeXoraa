@@ -1,13 +1,13 @@
 const express = require('express');
 const app = express();
-const { myReccommendations, myFriends , sendFriendRequests , acceptFriendRequests , getFriendRequests , OutgoingFriendRequests} = require("../controllers/user.controller.js");
+const { myRecommendations, myFriends , sendFriendRequests , acceptFriendRequests , getFriendRequests , OutgoingFriendRequests} = require("../controllers/user.controller.js");
 const { authmiddleware } = require('../middleware/auth.middleware.js'); // Changed from 'protected' to 'authMiddleware'
 const Router = express.Router();
 
 // Apply the auth middleware to all routes in this router  
 app.use(authmiddleware); 
 
-Router.get("/", myReccommendations);
+Router.get('/users', authmiddleware, myRecommendations);
 
 Router.get("/myFriends", myFriends);
 

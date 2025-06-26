@@ -1,27 +1,26 @@
 const { default: FriendRequest } = require("../models/FriendRequests");
 const User = require("../models/User");
 
-async function myReccommendations(req, res) {
-    try{
 
+async function myRecommendations(req, res) {
+    try {
         const userID = req.user.id;
         const user = req.user;
 
-        const myReccommendations = await User.find({
-            $and:[
-                {_id:{$ne :userID}},
-                {_id:{$nin:user.friends}},
-                {isOnBoard:true},
+        const myRecommendations = await User.find({
+            $and: [
+                { _id: { $ne: userID } },
+                { _id: { $nin: user.friends } },
+                { isOnBoard: true },
             ]
-        })
+        }).select('-password'); // Exclude password field for security
 
-        return res.status(200).json({myReccommendations});
+        // Return the array directly, not wrapped in an object
+        return res.status(200).json(myRecommendations);
+    } catch(err) {
+        console.error("Error in myRecommendations:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-        catch(err){
-        return res.status(500).json({message:"Internal Server Error"});
-        console.error("Error in myReccommendations:", err);
-    }
-
 }
 
 
@@ -158,7 +157,7 @@ async function OutgoingFriendRequests(req, res) {
        const outgoingreqs =  await FriendRequest.find({
         sender:user,
         status:"pending",
-       }).populate("sender", "fullanem profilepic native_language learning_language");
+       }).populate("sender", "fullname profilepic native_language learning_language");
 
        return res.status(200).json({outgoingreqs});
     }
@@ -170,4 +169,4 @@ async function OutgoingFriendRequests(req, res) {
 
 
 
-module.exports= {myReccommendations , myFriends , sendFriendRequests , acceptFriendRequests , getFriendRequests , OutgoingFriendRequests} ; 
+module.exports= {myRecommendations , myFriends , sendFriendRequests , acceptFriendRequests , getFriendRequests , OutgoingFriendRequests} ; 

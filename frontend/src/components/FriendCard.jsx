@@ -20,7 +20,7 @@ Native: {friend.nativeLanguage}
 </span>
 <span className="badge badge-outline text-xs">
 {getLanguageFlag(friend.learningLanguage)}
-Learning: {friend. learningLanguage}
+Learning: {friend.learningLanguage}
 </span>
 </div>
 
