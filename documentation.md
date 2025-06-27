@@ -334,3 +334,22 @@ Auth state updated with new user info
 
 
 =======================================================================================================================
+
+
+
+## 13.) Loader Page :-  
+### This page is just for the loading animation. It will be displayed when the user is waiting for the response from the server.
+### It uses LoaderSinWheel icon form lucide react 
+
+
+========================================================================================================================
+
+
+## 14.) ZUTAND (THEME CHANGER)
+### for changing themes we have used ZUTAND npm i zutand krke install kr lena then bass ek file and usme woh code add krdena google me zutand ki website pr jayega toh dhikhega woh wala , then u can use it like a hook , it will return a function which will change the theme of the app.
+
+### just import taht file and switch themes
+
+
+
+========================================================================================================================

@@ -1,28 +1,29 @@
 const { default: FriendRequest } = require("../models/FriendRequests");
 const User = require("../models/User");
 
-async function myReccommendations(req, res) {
-    try{
 
+async function myRecommendations(req, res) {
+    try {
         const userID = req.user.id;
         const user = req.user;
 
-        const myReccommendations = await User.find({
-            $and:[
-                {_id:{$ne :userID}},
-                {_id:{$nin:user.friends}},
-                {isOnBoard:true},
+        const myRecommendations = await User.find({
+            $and: [
+                { _id: { $ne: userID } },
+                { _id: { $nin: user.friends } },
+                { isOnBoard: true },
             ]
-        })
+        }).select('-password'); // Exclude password field for security
 
-        return res.status(200).json({myReccommendations});
+        // Return the array directly, not wrapped in an object
+        return res.status(200).json(myRecommendations);
+    } catch(err) {
+        console.error("Error in myRecommendations:", err);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-        catch(err){
-        return res.status(500).json({message:"Internal Server Error"});
-        console.error("Error in myReccommendations:", err);
-    }
-
 }
+
+
 
 
 async function myFriends(req, res) {
@@ -37,49 +38,52 @@ async function myFriends(req, res) {
 }
 
 
-async function sendFriendRequests(req , res) {
-    try{
-        const user = req.user.id;
-        const{id:recipient_id} = req.params ;
 
-        if(user === recipient_id){
-            return res.status(400).json({message:"You cannot send friend request to yourself"});
+
+
+async function sendFriendRequests(req, res) {
+    try {
+        const user = req.user.id;
+        const { id: recipient_id } = req.params;
+
+        if (user === recipient_id) {
+            return res.status(400).json({ message: "You cannot send friend request to yourself" });
         }
 
         const recipient = await User.findById(recipient_id);
-        if(!recipient){
-            return res.status(400).json({message: "User Not Found !!"})
+        if (!recipient) {
+            return res.status(400).json({ message: "User Not Found !!" });
         }
 
-        if(recipient.friends.includes(user)){
-            return res.status(400).json({message:"You are already Friend with this User"});
+        if (recipient.friends.includes(user)) {
+            return res.status(400).json({ message: "You are already Friend with this User" });
         }
 
-        const existinguser = await FriendRequest.findOne({
-            $or:[
-                {sender:user , recipient:recipient_id},
-                {sender:recipient_id , recipient:user},
+        const existingRequest = await FriendRequest.findOne({
+            $or: [
+                { sender: user, recipient: recipient_id },
+                { sender: recipient_id, recipient: user },
             ],
         });
 
-        if(existinguser){
-            return res.status(400).json({message:"A Friend Request Already Exists from thsi user!!!"});
+        if (existingRequest) {
+            return res.status(400).json({ message: "A Friend Request Already Exists from this user!!!" });
         }
 
-
-        const FriendRequest = await FriendRequest.create({
-            sender: user ,
-            recipient:recipient_id,
+        // Fixed: Use a different variable name
+        const newFriendRequest = await FriendRequest.create({
+            sender: user,
+            recipient: recipient_id,
         });
 
-        return res.status(200).json({FriendRequest});
+        return res.status(200).json({ friendRequest: newFriendRequest });
 
+    } catch (err) {
+        console.error("Error in sendFriendRequests:", err); // Move this before return
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-    catch(err){
-        return res.status(500).json({message:"Internal Server Error"});
-        console.error("Error in sendFriendReuests:", err);
 }
-}
+
 
 
 async function acceptFriendRequests(req, res) {
@@ -158,7 +162,7 @@ async function OutgoingFriendRequests(req, res) {
        const outgoingreqs =  await FriendRequest.find({
         sender:user,
         status:"pending",
-       }).populate("sender", "fullanem profilepic native_language learning_language");
+       }).populate("sender", "fullname profilepic native_language learning_language");
 
        return res.status(200).json({outgoingreqs});
     }
@@ -170,4 +174,4 @@ async function OutgoingFriendRequests(req, res) {
 
 
 
-module.exports= {myReccommendations , myFriends , sendFriendRequests , acceptFriendRequests , getFriendRequests , OutgoingFriendRequests} ; 
+module.exports= {myRecommendations , myFriends , sendFriendRequests , acceptFriendRequests , getFriendRequests , OutgoingFriendRequests} ; 
