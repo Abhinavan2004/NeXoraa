@@ -61,7 +61,14 @@ const isOnboarded = authUser?.isOnBoard;
              (<OnBoardPage />) 
               : (<Navigate to="/" />)
               ) : <Navigate to="/login" />} />
-        <Route path="/notifications" element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />} />
+
+
+  <Route path="/notifications" element={
+          isAuthenticated && isOnboarded ? 
+          (<Layout showSidebars={true}><NotificationsPage /></Layout>) :
+           (<Navigate to={!isAuthenticated? "/login" : "/onboarding"}/>) 
+          } 
+          />
         
       </Routes>
       <Toaster />

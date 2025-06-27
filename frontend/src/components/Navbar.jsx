@@ -9,7 +9,7 @@ const Navbar = () => {
   const location = useLocation();
   const isChatPage = location.pathname?.startsWith("/chat") ;
   const queryclient = QueryClient ;
-  const {mutate:logoutMutation , } = useMutation({
+  const {mutate:logoutMutation} = useMutation({
     mutationFn: async () => {
       const response = await axiosInstance.post("/auth/logout");
       return response.data;

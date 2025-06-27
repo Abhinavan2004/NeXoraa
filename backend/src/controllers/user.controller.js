@@ -128,16 +128,16 @@ async function acceptFriendRequests(req, res) {
 
 async function getFriendRequests(req , res) {
     try{
-        const user = req.user.id ;
+        const userId = req.user.id ;
 
         const incomingreqs = await FriendRequest.find({
-            recipient:user,
-            status:"pending",
-        }).populate("sender" , "fullName profilepic native_language learning_language");
+            recipient:userId,
+            status:'pending',
+        }).populate('sender' , 'fullName profilepic native_language learning_language');
     
     
        const acceptedreqs = await FriendRequest.find({
-        recipient: user,
+        recipient: userId,
         status: "accepted",
        }).populate("recipient", "fullName profilepic");
 
