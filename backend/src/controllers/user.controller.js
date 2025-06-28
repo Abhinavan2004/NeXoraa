@@ -28,7 +28,7 @@ async function myRecommendations(req, res) {
 
 async function myFriends(req, res) {
     try{
-        const user = await User.findById(req.user.id).select("friends").populate("friends","fullname native_language learning_language profilepic");
+        const user = await User.findById(req.user.id).select("friends").populate("friends","name native_language learning_language profilepic");
         res.status(200).json(user.friends);
     }
     catch(err){
@@ -91,28 +91,28 @@ async function acceptFriendRequests(req, res) {
         const user = req.user.id ;
         const {id:request_id} = req.params;
 
-        const FriendRequest = await FriendRequest.findById(request_id);
+        const FriendRequestdoc = await FriendRequest.findById(request_id);
 
-        if(!FriendRequest){
+        if(!FriendRequestdoc){
             return res.status(400).json({message:"Friend Request Not Found"});
         }
 
-        if(FriendRequest.recipient.toString() !== user){
+        if(FriendRequestdoc.recipient.toString() !== user){
             return res.status(400).json({message:"You are not the recipient of this Friend Request"});
         }
 
 
         // to change the status of the Friend Request to accepted
-        FriendRequest.status = "accepted";
-        await FriendRequest.save();
+        FriendRequestdoc.status = "accepted";
+        await FriendRequestdoc.save();
 
 
         // to update the both reciepient and sender  friends list 
         await User.findByIdAndUpdate( user,
-            {$addToSet:{frineds:FriendRequest.sender}},
+            {$addToSet:{friends:FriendRequestdoc.sender}},
         );
 
-        await User.findByIdAndUpdate( FriendRequest.sender,
+        await User.findByIdAndUpdate(FriendRequestdoc.sender,
             {$addToSet:{friends:user}},
         );
 
@@ -125,23 +125,25 @@ async function acceptFriendRequests(req, res) {
     }
 }
 
-
 async function getFriendRequests(req , res) {
     try{
         const userId = req.user.id ;
 
+        // Incoming requests (people who want to be your friend)
         const incomingreqs = await FriendRequest.find({
-            recipient:userId,
-            status:'pending',
-        }).populate('sender' , 'fullName profilepic native_language learning_language');
+            recipient: userId,
+            status: 'pending',
+        }).populate('sender', 'name profilepic native_language learning_language');
     
-    
-       const acceptedreqs = await FriendRequest.find({
-        recipient: userId,
-        status: "accepted",
-       }).populate("recipient", "fullName profilepic");
+        // Accepted requests (people who accepted YOUR friend requests)
+        // You want to see who accepted your requests, so find where YOU are the sender
+        const acceptedreqs = await FriendRequest.find({
+            sender: userId,           // Find requests WHERE YOU ARE the sender
+            status: "accepted",
+        }).populate("recipient", "name profilepic");
+        //          ^^^^^^^^^ - Populate the RECIPIENT (the person who accepted your request)
 
-       return res.status(200).json({
+        return res.status(200).json({
             incomingreqs,
             acceptedreqs
         });
@@ -153,7 +155,6 @@ async function getFriendRequests(req , res) {
     }
 }
 
-
 async function OutgoingFriendRequests(req, res) {
     try{
 
@@ -162,9 +163,9 @@ async function OutgoingFriendRequests(req, res) {
        const outgoingreqs =  await FriendRequest.find({
         sender:user,
         status:"pending",
-       }).populate("sender", "fullname profilepic native_language learning_language");
+       }).populate("sender", "name profilepic native_language learning_language");
 
-       return res.status(200).json({outgoingreqs});
+       return res.status(200).json(outgoingreqs);
     }
     catch(err){
         return res.status(500).json({message:"Internal Server Error"});

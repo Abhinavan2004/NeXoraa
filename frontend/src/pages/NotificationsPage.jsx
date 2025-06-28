@@ -16,7 +16,7 @@ const NotificationsPage = () => {
 
   const { mutate: acceptRequestMutation, isPending } = useMutation({
     mutationFn: async (requestId) => {
-      const response = await axiosInstance.post(`/user/sendFriendRequests/${requestId}/accept`);
+      const response = await axiosInstance.put(`/user/sendFriendRequests/${requestId}/accept`);
       return response.data;
     },
     onSuccess: () => {
@@ -71,18 +71,18 @@ const NotificationsPage = () => {
                               {request.sender?.profilepic ? (
                                 <img 
                                   src={request.sender.profilepic} 
-                                  alt={request.sender.fullName || 'User'} 
+                                  alt={request.sender.name || 'User'} 
                                   className="w-full h-full rounded-full object-cover"
                                 />
                               ) : (
                                 <span className="text-lg font-bold">
-                                  {request.sender?.fullName?.charAt(0) || request.sender?.fullname?.charAt(0) || '?'}
+                                  {request.sender?.name?.charAt(0) || request.sender?.name?.charAt(0) || '?'}
                                 </span>
                               )}
                             </div>
                             <div>
                               <h3 className="font-semibold">
-                                {request.sender?.fullName || request.sender?.fullname || 'Unknown User'}
+                                {request.sender?.ame || request.sender?.name || 'Unknown User'}
                               </h3>
                               <div className="flex flex-wrap gap-1.5 mt-1">
                                 <span className="badge badge-secondary badge-sm">
@@ -128,21 +128,21 @@ const NotificationsPage = () => {
                             {notification.recipient?.profilepic ? (
                               <img
                                 src={notification.recipient.profilepic}
-                                alt={notification.recipient.fullName || 'User'}
+                                alt={notification.recipient.name || 'User'}
                                 className="w-full h-full rounded-full object-cover"
                               />
                             ) : (
                               <span className="text-sm font-bold">
-                                {notification.recipient?.fullName?.charAt(0) || '?'}
+                                {notification.recipient?.name?.charAt(0) || '?'}
                               </span>
                             )}
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold">
-                              {notification.recipient?.fullName || 'Unknown User'}
+                              {notification.recipient?.name || 'Unknown User'}
                             </h3>
                             <p className="text-sm text-gray-600 mt-1">
-                              {notification.recipient?.fullName || 'Someone'} accepted your friend request
+                              {notification.recipient?.name || 'Someone'} Accepted your friend request
                             </p>
                             <div className="flex flex-wrap gap-1.5 mt-2">
                               <span className="badge badge-secondary badge-sm">

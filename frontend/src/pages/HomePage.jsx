@@ -41,16 +41,20 @@ const HomePage = () => {
       const response = await axiosInstance.post(`/user/sendFriendRequests/${userId}`);
       return response.data;
     },
-    onSuccess: () => {
+   onSuccess: (data, userId) => {
+      // Invalidate queries to refetch fresh data
       queryClient.invalidateQueries({ queryKey: ['OutGoingFriendReqs'] });
-    }
+      
+      // Optimistically update the local state
+      setOutGoingRequestIDS(prev => new Set([...prev, userId]));
+    },
   });
 
   useEffect(() => {
     const outgoingIds = new Set();
     if (OutGoingFriendReqs && OutGoingFriendReqs.length > 0) {
       OutGoingFriendReqs.forEach((req) => {
-        outgoingIds.add(req._id || req.id);
+        outgoingIds.add(req.recipient._id || req.recipient);
       });
       setOutGoingRequestIDS(outgoingIds);
     }
@@ -58,7 +62,7 @@ const HomePage = () => {
 
   const handleSendRequest = (userId) => {
     sendRequestMutation(userId);
-    setOutGoingRequestIDS(prev => new Set([...prev, userId]));
+    // setOutGoingRequestIDS(prev => new Set([...prev, userId]));
   };
 
   return (
