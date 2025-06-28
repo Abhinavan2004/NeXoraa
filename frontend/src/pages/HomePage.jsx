@@ -132,7 +132,7 @@ const HomePage = () => {
                         <div className="avatar size-16 rounded-full overflow-hidden">
                           <img 
                             src={user.profilepic || "https://avatar.iran.liara.run/public/1"} 
-                            alt={user.fullName} 
+                            alt={user.name} 
                             className="w-full h-full object-cover"
                           />
                         </div>

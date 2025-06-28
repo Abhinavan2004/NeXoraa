@@ -47,7 +47,7 @@ const FriendCard = ({ friend, onSendFriendRequest, hasRequestSent = false }) => 
             <div className="w-16 h-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
               <img 
                 src={friend.profilepic || "https://avatar.iran.liara.run/public/1"} 
-                alt={friend.fullname || friend.name}
+                alt={friend.name || friend.name}
                 className="w-full h-full object-cover rounded-full"
               />
             </div>
@@ -55,7 +55,7 @@ const FriendCard = ({ friend, onSendFriendRequest, hasRequestSent = false }) => 
           
           <div className="flex-1 min-w-0">
             <h3 className="font-bold text-xl text-base-content truncate">
-              {friend.fullname || friend.name || 'Unknown User'}
+              {friend.name || friend.name || 'Unknown User'}
             </h3>
             {friend.location && (
               <p className="text-sm text-base-content/70 flex items-center gap-1 mt-1">
@@ -82,14 +82,14 @@ const FriendCard = ({ friend, onSendFriendRequest, hasRequestSent = false }) => 
           <div className="flex flex-wrap gap-2">
             {friend.nativeLanguage && (
               <div className="badge badge-outline badge-lg gap-2">
-                {getLanguageFlag(friend.nativeLanguage)}
-                <span className="text-xs font-medium">Native: {friend.nativeLanguage}</span>
+                {getLanguageFlag(friend.native_language)}
+                <span className="text-xs font-medium">Native: {friend.native_language}</span>
               </div>
             )}
             {friend.learningLanguage && (
               <div className="badge badge-primary badge-lg gap-2">
-                {getLanguageFlag(friend.learningLanguage)}
-                <span className="text-xs font-medium text-white">Learning: {friend.learningLanguage}</span>
+                {getLanguageFlag(friend.learning_language)}
+                <span className="text-xs font-medium text-white">Learning: {friend.learning_language}</span>
               </div>
             )}
           </div>
