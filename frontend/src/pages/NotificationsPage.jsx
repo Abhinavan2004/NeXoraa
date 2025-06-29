@@ -142,16 +142,9 @@ const NotificationsPage = () => {
                               {notification.recipient?.name || 'Unknown User'}
                             </h3>
                             <p className="text-sm text-gray-600 mt-1">
-                              {notification.recipient?.name || 'Someone'} Accepted your friend request
+                              {notification.recipient?.name || 'Someone'} accepted your friend request
                             </p>
-                            <div className="flex flex-wrap gap-1.5 mt-2">
-                              <span className="badge badge-secondary badge-sm">
-                                Native: {notification.recipient?.native_language || 'N/A'}
-                              </span>
-                              <span className="badge badge-outline badge-sm">
-                                Learning: {notification.recipient?.learning_language || 'N/A'}
-                              </span>
-                            </div>
+                           
                           </div>
                         </div>
                       </div>

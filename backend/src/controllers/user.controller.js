@@ -141,7 +141,6 @@ async function getFriendRequests(req , res) {
             sender: userId,           // Find requests WHERE YOU ARE the sender
             status: "accepted",
         }).populate("recipient", "name profilepic");
-        //          ^^^^^^^^^ - Populate the RECIPIENT (the person who accepted your request)
 
         return res.status(200).json({
             incomingreqs,
