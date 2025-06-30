@@ -50,6 +50,7 @@ const HomePage = () => {
     },
   });
 
+  
   useEffect(() => {
     const outgoingIds = new Set();
     if (OutGoingFriendReqs && OutGoingFriendReqs.length > 0) {
