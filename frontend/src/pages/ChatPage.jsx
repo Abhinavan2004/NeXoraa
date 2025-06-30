@@ -4,16 +4,18 @@ import { useParams } from 'react-router';
 import axiosInstance from '../lib/axios';
 import { StreamChat } from 'stream-chat'; // Use ES6 import instead of require
 import ChatLoader from '../components/ChatLoader';
+import CallButton from '../components/CallIcon';
 import { 
   Channel, 
   Window, 
   MessageInput, 
   Chat, 
+  Thread,
   ChannelHeader, 
   MessageList 
-} from 'stream-chat'; // Import from stream-chat-react, not stream-chat
+} from 'stream-chat-react'; // Import from stream-chat-react, not stream-chat
 import { toast } from 'react-hot-toast'; // Add toast import
-
+const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY;
 
 const ChatPage = () => {
 
@@ -83,12 +85,25 @@ setChannel(currChannel);
     inichat();
   }, [tokenData , authUser , targetId]);
 
-  if (isLoading || !channel || !client) return <ChatLoader />
+  const handleVideoCall =() =>{
+    if(channel){
+      const callUrl = `${window.location.origin}/call/${channel.id}`;
+      
+      channel.sendMessage({
+        text: `I have started a Video Call. Join it!!! ${callUrl}`
+      });
+
+      toast.success("Video Call link sent successfully");
+    }
+  };
+
+  if (isLoading || !channel || !chatClient) return <ChatLoader />
   return (
 <div className="h-[93vh]">
-<Chat client={client}>
+<Chat client={chatClient}>
 <Channel channel={channel}>
 <div className="w-full relative">
+<CallButton handleVideoCall={handleVideoCall}/>
 <Window>
 <ChannelHeader />
 <MessageList />
