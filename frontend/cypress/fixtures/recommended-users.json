@@ -1,0 +1,29 @@
+[
+  {
+    "_id": "user1",
+    "name": "Maria Garcia",
+    "profilepic": "https://avatar.iran.liara.run/public/3",
+    "location": "Madrid",
+    "bio": "Native Spanish speaker looking to practice English. Love movies and music!",
+    "native_language": "Spanish",
+    "learning_language": "English"
+  },
+  {
+    "_id": "user2",
+    "name": "Pierre Dubois", 
+    "profilepic": "https://avatar.iran.liara.run/public/4",
+    "location": "Paris",
+    "bio": "French teacher who wants to learn German. Interested in philosophy and art.",
+    "native_language": "French",
+    "learning_language": "German"
+  },
+  {
+    "_id": "user3",
+    "name": "Anna Mueller",
+    "profilepic": "https://avatar.iran.liara.run/public/5", 
+    "location": "Berlin",
+    "bio": "Software developer from Germany. Want to improve my English skills!",
+    "native_language": "German",
+    "learning_language": "English"
+  }
+]

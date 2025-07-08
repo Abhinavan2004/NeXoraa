@@ -1,0 +1,20 @@
+[
+  {
+    "_id": "friend1",
+    "name": "John Doe",
+    "profilepic": "https://avatar.iran.liara.run/public/1",
+    "location": "New York",
+    "bio": "Love learning new languages!",
+    "native_language": "English",
+    "learning_language": "Spanish"
+  },
+  {
+    "_id": "friend2", 
+    "name": "Jane Smith",
+    "profilepic": "https://avatar.iran.liara.run/public/2",
+    "location": "London",
+    "bio": "Passionate about cultural exchange",
+    "native_language": "English", 
+    "learning_language": "French"
+  }
+]

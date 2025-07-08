@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "req1",
+    "sender": "currentUserId",
+    "recipient": {
+      "_id": "user1",
+      "name": "Maria Garcia"
+    },
+    "status": "pending",
+    "createdAt": "2024-01-01T00:00:00.000Z"
+  }
+]
