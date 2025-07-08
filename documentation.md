@@ -354,3 +354,12 @@ Auth state updated with new user info
 
 
 ========================================================================================================================
+
+
+### 15.) Deployement procdure to Render :-
+
+1.) at VIDEO_CHAT_SCREEN_APP --> do npm init -y 
+2.) goto backend packeage.json add script --> "start" ; "node src/server.js"
+3.) goto VIDEO_CHAT_SCREEN_APP/package.json  under script add --> "build" : "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
+4.) goto VIDEO_CHAT_SCREEN_APP and do --> npm run build 
+5.) 
