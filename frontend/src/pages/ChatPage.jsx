@@ -102,7 +102,7 @@ setChannel(currChannel);
 <div className="h-[93vh]">
 <Chat client={chatClient}>
 <Channel channel={channel}>
-<div className="w-full relative">
+<div className="w-full relative [&_.str-chat__container]:border-none [&_.str-chat__channel]:border-none [&_.str-chat__main-panel]:border-none">
 <CallButton handleVideoCall={handleVideoCall}/>
 <Window>
 <ChannelHeader />

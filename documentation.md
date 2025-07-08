@@ -359,7 +359,40 @@ Auth state updated with new user info
 ### 15.) Deployement procdure to Render :-
 
 1.) at VIDEO_CHAT_SCREEN_APP --> do npm init -y 
+
 2.) goto backend packeage.json add script --> "start" ; "node src/server.js"
+
 3.) goto VIDEO_CHAT_SCREEN_APP/package.json  under script add --> "build" : "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
+
+ (((npm install --prefix backend --> for installing our backend project 
+ npm install --prefix frontend  --> for installin our frontend part of project 
+ npm run build --prefix frontend --> for creation of build(for vite --> dist folder under frontend) is created )))
+
 4.) goto VIDEO_CHAT_SCREEN_APP and do --> npm run build 
-5.) 
+
+5.) goto VIDEO_CHAT_SCREEN_APP/package.json  under script add --> "start" : "npm run start --prefix backend"
+
+((( it helps running the start command which is under backend package.json file which runs the node server.js file)))
+
+6.) now go to backend/server.js file & do this -->
+    6.1) import path from 'path'
+    6.2) const __dirname = path.resolve();
+    6.3) if(process.env.NODE_ENV === "production") {
+          app.use(express.static(path.join(_dirname, " .. /frontend/dist")));
+
+          app.get("*", (req,res) =>{
+          res.sendFile(path.join(_dirname, " .. /frontend", "dist", "index.html")) 
+})
+ }
+
+7.) goto backend/.env  -->> add 
+             NODE_ENV=production
+
+8.) no goto frontend/src/lib/axios.js  and add this -->>
+     
+     const BASE_URL = import.meta.env.mode === 'development'? "http://localhost:4000/api" : "/api";    // Adjust the base URL based on the environment
+
+9.) goto VIDEO_CHAT_SCREEN_APP --> run npm run build then npm start 
+
+10.) 
+
