@@ -17,11 +17,16 @@ app.get("/", (req,res) =>{
     res.send("Hello World");
 })
 
+
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with your frontend URL        
+  origin: [
+    'http://localhost:5173', // For local development
+    'https://nexoraa-a-social-app-chat-and-video-call.onrender.com' // Replace with your actual frontend URL
+  ],
   withCredentials: true, // This allows cookies to be sent with requests
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods 
 }));
+
 
 app.use(express.json()); 
 app.use(cookieParser());
