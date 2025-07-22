@@ -35,6 +35,7 @@ const SignupPage = () => {
     signup_mutation(datacollect);
   }
 
+  
   return (
     <div className='h-screen flex justify-center items-center p-4 sm:p-6 md:p-8' data-theme="night">
       <div className="border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden">
