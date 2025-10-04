@@ -22,7 +22,7 @@ app.get("/", (req,res) =>{
 app.use(cors({
   origin: [
     'http://localhost:5173', // For local development
-    'https://nexoraa-a-social-app-chat-and-video-call.onrender.com' // Replace with your actual frontend URL
+    'https://nexoraa-frontend.onrender.com' // Replace with your actual frontend URL
   ],
   credentials: true, // This allows cookies to be sent with requests
   methods: ['GET', 'POST', 'PUT', 'DELETE' ,'OPTIONS'], // Allowed HTTP methods 
